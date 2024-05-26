@@ -69,11 +69,3 @@ func getBatteryData(filePath string) (string, error) {
 	return fmt.Sprintf("Battery: %d%% (%s)", capacity, charging), nil
 
 }
-func DisplayBatteryStatus() {
-	status, err := GetBatteryStatus()
-	if err != nil {
-		fmt.Println("Error:", err)
-	} else {
-		fmt.Println(status)
-	}
-}
