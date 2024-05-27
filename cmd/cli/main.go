@@ -24,7 +24,7 @@ var separatorStyle = lipgloss.NewStyle().
 
 var headerStyle = lipgloss.NewStyle().
 	Bold(true).
-	Foreground(lipgloss.Color("228"))
+	Foreground(lipgloss.Color("228")).Align(lipgloss.Center)
 
 var labelStyle = lipgloss.NewStyle().
 	Bold(true).
@@ -37,6 +37,7 @@ func main() {
 	info := system.GetSysInfo()
 	char := ascii.GetRandomAsciiArts()
 
+	// Center align the header text
 	header := headerStyle.Render("treefetch")
 
 	// Define the labels and their corresponding values

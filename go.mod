@@ -3,7 +3,6 @@ module github.com/mnsdojo/gofetch
 go 1.21.10
 
 require (
-	github.com/BigJk/imeji v0.0.3 // indirect
 	github.com/anthonynsimon/bild v0.13.0 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/charmbracelet/lipgloss v0.11.0 // indirect
