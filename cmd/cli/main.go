@@ -13,6 +13,8 @@ var style = lipgloss.NewStyle().
 	Padding(5).
 	Border(lipgloss.ThickBorder(), true, true, true, true).
 	BorderForeground(lipgloss.Color("228"))
+var asciiStyle = lipgloss.NewStyle().
+	Align(lipgloss.Center)
 
 var separatorStyle = lipgloss.NewStyle().
 	Border(lipgloss.NormalBorder(), false, false, true, false).
@@ -50,7 +52,8 @@ func main() {
 	}
 
 	separator := separatorStyle.Render("──────────────────────────────────────────────────")
+	asciiArt := asciiStyle.Render(char)
 
-	combinedOutput := fmt.Sprintf("%s\n%s\n%s\n%s", header, char, separator, output)
+	combinedOutput := fmt.Sprintf("%s\n%s\n%s\n%s", header, asciiArt, separator, output)
 	fmt.Println(style.Render(combinedOutput))
 }
