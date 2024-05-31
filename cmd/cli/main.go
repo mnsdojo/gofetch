@@ -8,11 +8,15 @@ import (
 	"github.com/mnsdojo/gofetch/internal/system"
 )
 
+
+
+var labelColor = lipgloss.Color("145") // You can choose any ANSI color code for the labels
 var style = lipgloss.NewStyle().
 	Bold(true).
 	Padding(5).
 	Border(lipgloss.ThickBorder(), true, true, true, true).Align(lipgloss.Center).
 	BorderForeground(lipgloss.Color("228"))
+
 var asciiStyle = lipgloss.NewStyle().
 	Align(lipgloss.Center)
 
@@ -28,6 +32,7 @@ var headerStyle = lipgloss.NewStyle().
 
 var labelStyle = lipgloss.NewStyle().
 	Bold(true).
+	Foreground(labelColor).
 	Width(15)
 
 var valueStyle = lipgloss.NewStyle().Bold(true).
@@ -38,11 +43,12 @@ func main() {
 	char := ascii.GetRandomAsciiArts()
 
 	// Center align the header text
-	header := headerStyle.Render("treefetch")
+	header := headerStyle.Render("gofetch")
 
 	// Define the labels and their corresponding values
 	labels := []string{"Username:", "OS Release:", "Kernel:", "Default Shell:", "Uptime:", "Memory Usage:"}
 	values := []string{info.UserName, info.OSRelease, info.Kernel, info.DefaultShell, info.Uptime, info.MemoryUsage}
+
 
 	// Create the output string with aligned labels and values using Lipgloss
 	var output string
