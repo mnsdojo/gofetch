@@ -18,7 +18,13 @@ type SysInfo struct {
 
 // getDefaultShell retrieves the default shell
 func getDefaultShell() (string, error) {
-	return getCmdOutput("echo", "$SHELL")
+	shell, err := getCmdOutput("bash", "-c", "echo $SHELL")
+	if err != nil {
+		panic(err)
+	}
+	shellPath := strings.TrimSpace(string(shell))
+	parts := strings.Split(shellPath, "/")
+	return parts[len(parts)-1], nil
 }
 
 // getCmdOutput executes a command and returns its trimmed output
@@ -128,4 +134,3 @@ func GetSysInfo() SysInfo {
 
 	return systemInfo
 }
-

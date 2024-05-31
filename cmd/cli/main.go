@@ -11,7 +11,7 @@ import (
 var style = lipgloss.NewStyle().
 	Bold(true).
 	Padding(5).
-	Border(lipgloss.ThickBorder(), true, true, true, true).
+	Border(lipgloss.ThickBorder(), true, true, true, true).Align(lipgloss.Center).
 	BorderForeground(lipgloss.Color("228"))
 var asciiStyle = lipgloss.NewStyle().
 	Align(lipgloss.Center)
