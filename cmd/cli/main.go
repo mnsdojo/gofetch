@@ -5,10 +5,10 @@ import (
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/mnsdojo/gofetch/internal/ascii"
+	"github.com/mnsdojo/gofetch/internal/battery"
+
 	"github.com/mnsdojo/gofetch/internal/system"
 )
-
-
 
 var labelColor = lipgloss.Color("145") // You can choose any ANSI color code for the labels
 var style = lipgloss.NewStyle().
@@ -41,14 +41,17 @@ var valueStyle = lipgloss.NewStyle().Bold(true).
 func main() {
 	info := system.GetSysInfo()
 	char := ascii.GetRandomAsciiArts()
+	battery, err := battery.GetBatteryStatus()
+	if err != nil {
+		panic(err)
+	}
 
 	// Center align the header text
 	header := headerStyle.Render("gofetch")
 
 	// Define the labels and their corresponding values
-	labels := []string{"Username:", "OS Release:", "Kernel:", "Default Shell:", "Uptime:", "Memory Usage:"}
-	values := []string{info.UserName, info.OSRelease, info.Kernel, info.DefaultShell, info.Uptime, info.MemoryUsage}
-
+	labels := []string{"Username:", "Battery", "OS Release:", "Kernel:", "Default Shell:", "Uptime:", "Memory Usage:"}
+	values := []string{info.UserName, battery, info.OSRelease, info.Kernel, info.DefaultShell, info.Uptime, info.MemoryUsage}
 
 	// Create the output string with aligned labels and values using Lipgloss
 	var output string
