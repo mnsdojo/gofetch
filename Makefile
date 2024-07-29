@@ -1,5 +1,5 @@
 build:
-	go build -o bin/main cmd/cli/main.go 
+	  go build -o main.go
 
 run:
-	go run cmd/cli/main.go
+	go run main.go

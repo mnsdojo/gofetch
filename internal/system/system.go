@@ -20,7 +20,7 @@ type SysInfo struct {
 func getDefaultShell() (string, error) {
 	shell, err := getCmdOutput("bash", "-c", "echo $SHELL")
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 	shellPath := strings.TrimSpace(string(shell))
 	parts := strings.Split(shellPath, "/")
@@ -46,8 +46,13 @@ func getUserInfo() (string, error) {
 	return getCmdOutput("whoami")
 }
 
+// getOsRelease retrieves the OS release name from /etc/os-release
 func getOsRelease() (string, error) {
-	return getCmdOutput("grep", "^PRETTY_NAME=", "/etc/os-release")
+	// Use awk to extract the value after the '=' sign, and remove surrounding quotes and spaces
+	
+	// copied from the internet !
+	cmd := "awk -F= '/^PRETTY_NAME=/ {gsub(/^\"|\"$/, \"\", $2); print $2}' /etc/os-release"
+	return getCmdOutput("bash", "-c", cmd)
 }
 
 // getUptime retrieves the system uptime
@@ -80,50 +85,40 @@ func getMemoryUsage() (string, error) {
 	return fmt.Sprintf("%.2f MB/%.2f MB", float64(availableMb)/1024, float64(totalMb)/1024), nil
 }
 
-// GetSysInfo gathers the desired system information
-func GetSysInfo() SysInfo {
-	var systemInfo SysInfo
+func GetSysInfo() (*SysInfo, error) {
+	systemInfo := &SysInfo{}
 
 	userName, err := getUserInfo()
 	if err != nil {
-		fmt.Printf("Error retrieving user name: %v\n", err)
-		return systemInfo
+		return systemInfo, fmt.Errorf("error retrieving user name: %v", err)
 	}
 
 	osRelease, err := getOsRelease()
 	if err != nil {
-		fmt.Printf("Error retrieving OS release: %v\n", err)
-		return systemInfo
+		return systemInfo, fmt.Errorf("error retrieving OS release: %v", err)
 	}
-	// Strip the PRETTY_NAME= prefix and quotes from osRelease
-	osRelease = strings.TrimPrefix(osRelease, "PRETTY_NAME=")
-	osRelease = strings.Trim(osRelease, `"`)
 
 	kernel, err := getKernel()
 	if err != nil {
-		fmt.Printf("Error retrieving kernel version: %v\n", err)
-		return systemInfo
+		return systemInfo, fmt.Errorf("error retrieving kernel version: %v", err)
 	}
 
 	defaultShell, err := getDefaultShell()
 	if err != nil {
-		fmt.Printf("Error retrieving default shell: %v\n", err)
-		return systemInfo
+		return systemInfo, fmt.Errorf("error retrieving default shell: %v", err)
 	}
 
 	memoryUsage, err := getMemoryUsage()
 	if err != nil {
-		fmt.Printf("Error retrieving memory usage: %v\n", err)
-		return systemInfo
+		return systemInfo, fmt.Errorf("error retrieving memory usage: %v", err)
 	}
 
 	uptime, err := getUptime()
 	if err != nil {
-		fmt.Printf("Error retrieving uptime: %v\n", err)
-		return systemInfo
+		return systemInfo, fmt.Errorf("error retrieving uptime: %v", err)
 	}
 
-	systemInfo = SysInfo{
+	systemInfo = &SysInfo{
 		UserName:     userName,
 		OSRelease:    osRelease,
 		Kernel:       kernel,
@@ -132,5 +127,5 @@ func GetSysInfo() SysInfo {
 		MemoryUsage:  memoryUsage,
 	}
 
-	return systemInfo
+	return systemInfo, nil
 }
