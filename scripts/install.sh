@@ -1,12 +1,21 @@
 #!/bin/bash
 
-# Define variables
+# Set the program name and install directory
 PROGRAM_NAME="gofetch"
 INSTALL_DIR="/usr/local/bin"
-SOURCE_DIR="$(dirname "$0")/.."  # Directory containing main.go (parent of scripts directory)
+REPO_URL="https://github.com/mnsdojo/gofetch.git"
+TEMP_DIR="/tmp/gofetch"
 
-# Navigate to the root directory where main.go is located
-cd "$SOURCE_DIR" || { echo "Error: Unable to change directory to $SOURCE_DIR"; exit 1; }
+# Create a temporary directory
+mkdir -p "$TEMP_DIR"
+cd "$TEMP_DIR" || exit
+
+# Clone the repository
+git clone "$REPO_URL" .
+if [ $? -ne 0 ]; then
+    echo "Error: Failed to clone repository."
+    exit 1
+fi
 
 # Build the Go program
 go build -o "$PROGRAM_NAME"
@@ -15,11 +24,14 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# Move the binary to the installation directory
+# Install the program
 sudo mv "$PROGRAM_NAME" "$INSTALL_DIR/"
 if [ $? -ne 0 ]; then
     echo "Error: Installation failed. You may need superuser privileges."
     exit 1
 fi
+
+# Clean up
+rm -rf "$TEMP_DIR"
 
 echo "Installation successful. You can now use '$PROGRAM_NAME' from the terminal."
