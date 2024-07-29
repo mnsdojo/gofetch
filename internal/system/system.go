@@ -82,7 +82,7 @@ func getMemoryUsage() (string, error) {
 		return "", err
 	}
 
-	return fmt.Sprintf("%.2f MB/%.2f MB", float64(availableMb)/1024, float64(totalMb)/1024), nil
+	return fmt.Sprintf("%d MB/%d MB", (availableMb)/1024, (totalMb)/1024), nil
 }
 
 func GetSysInfo() (*SysInfo, error) {
