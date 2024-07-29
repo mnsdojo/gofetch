@@ -1,37 +1,35 @@
 #!/bin/bash
 
-# Set the program name and install directory
-PROGRAM_NAME="gofetch"
-INSTALL_DIR="/usr/local/bin"
-REPO_URL="https://github.com/mnsdojo/gofetch.git"
-TEMP_DIR="/tmp/gofetch"
+# Define the URL of the installation script and the temporary file location
+SCRIPT_URL="https://raw.githubusercontent.com/mnsdojo/gofetch/main/scripts/install.sh"
+TEMP_SCRIPT="/tmp/install.sh"
 
-# Create a temporary directory
-mkdir -p "$TEMP_DIR"
-cd "$TEMP_DIR" || exit
+# Download the script
+echo "Downloading installation script..."
+curl -fsSL "$SCRIPT_URL" -o "$TEMP_SCRIPT"
 
-# Clone the repository
-git clone "$REPO_URL" .
+# Check if download was successful
 if [ $? -ne 0 ]; then
-    echo "Error: Failed to clone repository."
+    echo "Error: Failed to download the script."
     exit 1
 fi
 
-# Build the Go program
-go build -o "$PROGRAM_NAME"
+# Make the script executable
+echo "Making the script executable..."
+chmod +x "$TEMP_SCRIPT"
+
+# Run the script
+echo "Running the installation script..."
+"$TEMP_SCRIPT"
+
+# Check if script executed successfully
 if [ $? -ne 0 ]; then
-    echo "Error: Build failed. Please check your Go code and try again."
+    echo "Error: Installation failed."
     exit 1
 fi
 
-# Install the program
-sudo mv "$PROGRAM_NAME" "$INSTALL_DIR/"
-if [ $? -ne 0 ]; then
-    echo "Error: Installation failed. You may need superuser privileges."
-    exit 1
-fi
+# Optionally, clean up
+echo "Cleaning up..."
+rm "$TEMP_SCRIPT"
 
-# Clean up
-rm -rf "$TEMP_DIR"
-
-echo "Installation successful. You can now use '$PROGRAM_NAME' from the terminal."
+echo "Installation completed successfully."
