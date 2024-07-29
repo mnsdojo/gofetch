@@ -77,7 +77,7 @@ func fetchSystemInfo() (*system.SysInfo, error) {
 
 // fetchASCIIArt retrieves random ASCII art
 func fetchASCIIArt() (string, error) {
-	return ascii.GetRandomAsciiArts(),nil
+	return ascii.GetRandomAsciiArts(), nil
 }
 
 // fetchBatteryStatus retrieves the current battery status
